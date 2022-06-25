@@ -1,26 +1,26 @@
 const handleStories = (e) => {
-    console.log(e.innerText);
-    const getStoriesData = async () => {
-        const showStoriesData = await fetch(
-            e.innerText === 'Stories'
-                ? 'https://hacker-news.firebaseio.com/v0/showstories.json?print=pretty'
-                : 'https://hacker-news.firebaseio.com/v0/jobstories.json?print=pretty'
-        );
-        const sData = await showStoriesData.json();
-        const sortedData = [...sData].sort((a, b) => (a > b ? -1 : 1));
-        const slicedData = sortedData.slice(0, 10);
-        const showStories = await Promise.all([
-            ...slicedData.map((storyId) =>
-                fetch(
-                    `https://hacker-news.firebaseio.com/v0/item/${storyId}.json?print=pretty`
-                ).then((showStory) => showStory.json())
-            ),
-        ]);
-        return showStories;
-    };
-    getStoriesData().then((showStories) => {
-        console.log(showStories);
-    });
+  console.log(e.innerText);
+  const getStoriesData = async () => {
+    const showStoriesData = await fetch(
+      e.innerText === "Stories"
+        ? "https://hacker-news.firebaseio.com/v0/showstories.json?print=pretty"
+        : "https://hacker-news.firebaseio.com/v0/jobstories.json?print=pretty"
+    );
+    const sData = await showStoriesData.json();
+    const sortedData = [...sData].sort((a, b) => (a > b ? -1 : 1));
+    const slicedData = sortedData.slice(0, 10);
+    const showStories = await Promise.all([
+      ...slicedData.map((storyId) =>
+        fetch(
+          `https://hacker-news.firebaseio.com/v0/item/${storyId}.json?print=pretty`
+        ).then((showStory) => showStory.json())
+      ),
+    ]);
+    return showStories;
+  };
+  getStoriesData().then((showStories) => {
+    console.log(showStories);
+  });
 };
 
 // const handlePolls = () => {
@@ -46,83 +46,109 @@ const handleStories = (e) => {
 // };
 //start from the max level going backwards and skip the decendants, fetch 1000 at a time while counting the number of pool
 // if the number of pool is less than fetch another 1000
-const handlePolls = () => {
-    // let id = 31873505 - 1000;
-    let maxId;
-    fetch(`https://hacker-news.firebaseio.com/v0/maxitem.json?print=pretty`)
-        .then((max) => max.json())
-        .then((max) => {
-            // console.log(max, typeof max);
-            maxId = max;
-            return max;
-        })
-        .then(() => {
-            let startId = maxId - 1000;
-            let id = startId;
-            let polls = [];
-            const getPoll = () => {
-                console.log('hello', id);
-                while (id) {
-                    // console.log('hello', id);
-                    fetch(
-                        `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`
-                    )
-                        .then((data) => data.json())
-                        .then((data) => {
-                            // console.log(data);
-                            if (data.type === 'poll') {
-                                console.log(data, data.type === 'poll');
-                            }
-                            // console.log('1');
-                            if (data.type !== 'poll') {
-                                if (data.descendants) {
-                                    console.log(data.descendants);
-                                    id += data.descendants;
-                                }
-                            }
-                            id += 1;
-                        });
-                    if (id === startId + 1000) {
-                        startId = startId - 1000;
-                        break;
-                    }
-                }
-            };
-            getPoll()
-        });
-    // console.log(maxId, typeof maxId);
-    // let startId = maxId - 1000;
-    // let id = startId;
-    // let polls = [];
-    // const getPoll = () => {
-    //     console.log('hello', id);
-    //     while (id) {
-    //         console.log('hello', id);
-    //         fetch(
-    //             `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`
-    //         )
-    //             .then((data) => data.json())
-    //             .then((data) => {
-    //                 // console.log(data);
-    //                 if (data.type === 'poll') {
-    //                     console.log(data, data.type === 'poll');
-    //                 }
-    //                 // console.log('1');
-    //                 if (data.type !== 'poll') {
-    //                     if (data.descendants) {
-    //                         console.log(data.descendants);
-    //                         id += data.descendants;
-    //                     }
-    //                 }
-    //                 id += 1;
-    //             });
-    //         if (id === startId + 1000) {
-    //             startId = startId - 1000;
-    //             break;
-    //         }
-    //     }
-    // };
-    // getPoll();
-    // if (pool.length === 10) {
-    // }
+const getPoll = ([[id, startId, maxId], count]) => {
+  let newId = id;
+  let newStartId = startId;
+  let newCount = count;
+  //console.log("hello", id);
+  console.log(id, startId);
+  return fetch(
+    `https://hacker-news.firebaseio.com/v0/item/${newId}.json?print=pretty`
+  )
+    .then((data) => data.json())
+    .then((data) => {
+      if (data.type === "poll") {
+        //console.log(data, data.type === "poll");
+        //newCount += 1;
+      }
+      let fetchNewCount = newCount + 1;
+      if (data.type !== "poll") {
+        if (data.descendants) {
+          //console.log(data.descendants);
+          newId += data.descendants;
+        }
+      }
+      newId += 1;
+      if (newId === newStartId + 1000) {
+        newStartId = newStartId - 1000;
+      }
+      return [[newId, newStartId, maxId], fetchNewCount];
+    });
 };
+const handlePolls = () => {
+  const magicLoop = (magicData) => {
+    let [getPollData, count] = magicData ? magicData : [[], 0];
+    let newCount = count;
+    if (newCount === 10) {
+      return;
+    }
+    console.log(newCount);
+    if (magicData !== undefined) {
+      let newMagicData = magicData;
+      getPoll(newMagicData).then((magicData) => {
+        console.log(magicData, getPollData);
+        magicLoop(magicData);
+      });
+      return;
+    }
+    fetch(`https://hacker-news.firebaseio.com/v0/maxitem.json?print=pretty`)
+      .then((max) => max.json())
+      .then((max) => {
+        maxId = max;
+        return max;
+      })
+      .then((maxId) => {
+        console.log("then1");
+        let startId = maxId - 1000;
+        let id = startId;
+        //let polls = [];
+        return getPoll([[id, startId, maxId], newCount])
+          .then((getPollData) => {
+            console.log("then2");
+            return getPollData;
+          })
+          .then((magicData) => {
+            console.log(magicData);
+            magicLoop(magicData);
+          });
+      });
+    return;
+  };
+
+  magicLoop();
+};
+// console.log(maxId, typeof maxId);
+// let startId = maxId - 1000;
+// let id = startId;
+// let polls = [];
+// const getPoll = () => {
+//     console.log('hello', id);
+//     while (id) {
+//         console.log('hello', id);
+//         fetch(
+//             `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`
+//         )
+//             .then((data) => data.json())
+//             .then((data) => {
+//                 // console.log(data);
+//                 if (data.type === 'poll') {
+//                     console.log(data, data.type === 'poll');
+//                 }
+//                 // console.log('1');
+//                 if (data.type !== 'poll') {
+//                     if (data.descendants) {
+//                         console.log(data.descendants);
+//                         id += data.descendants;
+//                     }
+//                 }
+//                 id += 1;
+//             });
+//         if (id === startId + 1000) {
+//             startId = startId - 1000;
+//             break;
+//         }
+//     }
+// };
+// getPoll();
+// if (pool.length === 10) {
+// }
