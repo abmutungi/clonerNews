@@ -57,22 +57,30 @@ const getPoll = ([[id, startId, maxId], count]) => {
   )
     .then((data) => data.json())
     .then((data) => {
+        let fetchNewId 
+        let fetchNewCount
       if (data.type === "poll") {
         //console.log(data, data.type === "poll");
         //newCount += 1;
+         fetchNewCount = newCount + 1;
       }
-      let fetchNewCount = newCount + 1;
       if (data.type !== "poll") {
+        fetchNewCount = newCount
         if (data.descendants) {
           //console.log(data.descendants);
-          newId += data.descendants;
+          fetchNewId = newId + data.descendants;
         }
       }
-      newId += 1;
-      if (newId === newStartId + 1000) {
-        newStartId = newStartId - 1000;
+     fetchNewId =  newId +1;
+     let fetchNewStartId
+      if (fetchNewId === newStartId + 1000) {
+        fetchNewStartId = newStartId - 1000;
+        fetchNewId = fetchNewStartId
+
+      }else{
+        fetchNewStartId = newStartId
       }
-      return [[newId, newStartId, maxId], fetchNewCount];
+      return [[fetchNewId, fetchNewStartId, maxId], fetchNewCount];
     });
 };
 const handlePolls = () => {
