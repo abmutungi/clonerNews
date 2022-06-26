@@ -181,6 +181,8 @@ const getPoll = ([[id, startId, maxId], count, polls]) => {
     let newStartId = startId;
     let newCount = count;
     let newPolls = polls ? polls : [];
+
+    if (newPolls.length) console.log(newPolls);
     return fetch(
         `https://hacker-news.firebaseio.com/v0/item/${newId}.json?print=pretty`
     )
@@ -189,13 +191,12 @@ const getPoll = ([[id, startId, maxId], count, polls]) => {
             let fetchNewId;
             let fetchNewCount;
             let fetchNewPolls = newPolls ? [...newPolls] : [];
-            if (data.type === "poll") {
+            if (data.type && data.type === "poll") {
                 console.log(data, data.type === "poll");
                 fetchNewPolls.push(data);
                 console.log(fetchNewPolls);
                 fetchNewCount = newCount + 1;
-            }
-            if (data.type !== "poll") {
+            } else {
                 fetchNewCount = newCount;
                 if (data.descendants) {
                     fetchNewId = newId + data.descendants;
@@ -286,7 +287,6 @@ const throttle = (func, wait) => {
 let inMaxId;
 let currMaxId;
 const fetchMaxId = () => {
-    console.log(inMaxId, currMaxId);
     fetch(`https://hacker-news.firebaseio.com/v0/maxitem.json?print=pretty`)
         .then((max) => max.json())
         .then((inMax) => {
