@@ -37,4 +37,11 @@ button {
     border-radius: 16px;
     margin-bottom: 10px;
     padding: 10px 40px;
+
+}
+
+
+.btn{
+    width: 120px;
+    
 }

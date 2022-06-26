@@ -1,18 +1,18 @@
 const timeConverter = (UNIX_timestamp) => {
     var a = new Date(UNIX_timestamp * 1000);
     var months = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
     ];
     var year = a.getFullYear();
     var month = months[a.getMonth()];
@@ -28,26 +28,27 @@ console.log(timeConverter(1656194839));
 const displayComments = (kid) => {
     console.log(document.body);
     const parent = document.getElementById(kid.parent);
-    const commentDiv = document.createElement('div');
-    const commentContent = document.createElement('div');
-    const commentAuthor = document.createElement('div');
+    const commentDiv = document.createElement("div");
+    const commentContent = document.createElement("div");
+    const commentAuthor = document.createElement("div");
     if (kid.text) {
         commentContent.innerHTML = kid.text;
-        commentContent.className = 'content-class';
+        commentContent.className = "content-class";
     }
     commentDiv.id = kid.id;
-    commentDiv.className = 'story-div-class';
+    commentDiv.className = "story-div-class";
     commentAuthor.innerHTML = `<span><b>@${kid.by}</b> ${timeConverter(
         kid.time
     )}</span>`;
     commentDiv.append(commentAuthor);
     commentDiv.append(commentContent);
     if (kid.kids) {
-        const commentBtn = document.createElement('button');
+        const commentBtn = document.createElement("button");
         commentBtn.textContent = `${kid.kids.length} Comments`;
+        commentBtn.className = "btn";
         commentDiv.append(commentBtn);
         commentBtn.addEventListener(
-            'click',
+            "click",
             () => {
                 handleComments(kid.kids);
             },
@@ -77,26 +78,26 @@ const handleComments = (commentIds) => {
 };
 
 const displayData = (story) => {
-    const container = document.querySelector('.main-container-class');
-    const storyDiv = document.createElement('div');
-    const storyLink = document.createElement('a');
-    const storyHead = document.createElement('h3');
-    const storyContent = document.createElement('div');
-    const storyAuthor = document.createElement('div');
-    const storyComment = document.createElement('button');
+    const container = document.querySelector(".main-container-class");
+    const storyDiv = document.createElement("div");
+    const storyLink = document.createElement("a");
+    const storyHead = document.createElement("h3");
+    const storyContent = document.createElement("div");
+    const storyAuthor = document.createElement("div");
+    const storyComment = document.createElement("button");
     if (story.url) {
         storyLink.href = story.url;
     }
     if (story.text) {
         storyContent.innerHTML = story.text;
-        storyContent.className = 'content-class';
+        storyContent.className = "content-class";
     }
     storyAuthor.innerHTML = `<span><b>@${story.by}</b> ${timeConverter(
         story.time
     )}</span>`;
-    storyDiv.setAttribute('data-type', `${story.type}`);
+    storyDiv.setAttribute("data-type", `${story.type}`);
     storyDiv.id = story.id;
-    storyDiv.className = 'story-div-class';
+    storyDiv.className = "story-div-class";
     storyHead.textContent = story.title;
     storyLink.append(storyHead);
     storyDiv.append(storyLink);
@@ -105,8 +106,9 @@ const displayData = (story) => {
     if (story.kids) {
         storyComment.textContent = `${story.kids.length} Comments`;
         storyDiv.append(storyComment);
+        storyComment.className = "btn";
         storyComment.addEventListener(
-            'click',
+            "click",
             (e) => {
                 handleComments(story.kids);
             },
@@ -120,9 +122,9 @@ const handleStories = (e) => {
     console.log(e);
     const getStoriesData = async () => {
         const showStoriesData = await fetch(
-            e.innerText === 'Stories'
-                ? 'https://hacker-news.firebaseio.com/v0/showstories.json?print=pretty'
-                : 'https://hacker-news.firebaseio.com/v0/jobstories.json?print=pretty'
+            e.innerText === "Stories"
+                ? "https://hacker-news.firebaseio.com/v0/showstories.json?print=pretty"
+                : "https://hacker-news.firebaseio.com/v0/jobstories.json?print=pretty"
         );
         const sData = await showStoriesData.json();
         const sortedData = [...sData].sort((a, b) => (a > b ? -1 : 1));
@@ -137,16 +139,16 @@ const handleStories = (e) => {
         return showStories;
     };
     let story;
-    if (e.innerText === 'Stories') {
-        story = 'story';
-    } else if (e.innerText === 'Jobs') {
-        story = 'job';
-    } else if (e.innerText === 'Polls') {
-        story = 'poll';
-    } else if (e.innerText === 'New') {
-        story = 'new';
+    if (e.innerText === "Stories") {
+        story = "story";
+    } else if (e.innerText === "Jobs") {
+        story = "job";
+    } else if (e.innerText === "Polls") {
+        story = "poll";
+    } else if (e.innerText === "New") {
+        story = "new";
     } else {
-        story = 'all';
+        story = "all";
     }
     let notIncluded = document.querySelectorAll(
         `.main-container-class div:not(${story})`
@@ -176,13 +178,13 @@ const getPoll = ([[id, startId, maxId], count, polls]) => {
             let fetchNewId;
             let fetchNewCount;
             let fetchNewPolls = newPolls ? [...newPolls] : [];
-            if (data.type === 'poll') {
-                console.log(data, data.type === 'poll');
+            if (data.type === "poll") {
+                console.log(data, data.type === "poll");
                 fetchNewPolls.push(data);
                 console.log(fetchNewPolls);
                 fetchNewCount = newCount + 1;
             }
-            if (data.type !== 'poll') {
+            if (data.type !== "poll") {
                 fetchNewCount = newCount;
                 if (data.descendants) {
                     fetchNewId = newId + data.descendants;
