@@ -238,16 +238,26 @@ const handlePolls = () => {
                 return max;
             })
             .then((maxId) => {
-                let startId = maxId - 1000;
+                let startId = maxId - 25000;
                 let id = startId;
                 let newPolls = polls;
-                return getPoll([[id, startId, maxId], newCount, newPolls])
-                    .then((getPollData) => {
-                        return getPollData;
-                    })
-                    .then((magicData) => {
-                        magicLoop(magicData);
-                    });
+                let idsToCheck = [];
+                for (let i = startId; i < startId + 25000; i++) {
+                    idsToCheck.push(i);
+                }
+                let batch = idsToCheck.map((id) =>
+                    getPoll([[id, startId, maxId], newCount, newPolls])
+                );
+                Promise.all(batch).then((responsesData) =>
+                    console.log(responsesData)
+                );
+                // return getPoll([[id, startId, maxId], newCount, newPolls])
+                //     .then((getPollData) => {
+                //         return getPollData;
+                //     })
+                //     .then((magicData) => {
+                //         magicLoop(magicData);
+                //     });
             });
         return;
     };
