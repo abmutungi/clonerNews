@@ -43,11 +43,6 @@ button {
     width: 120px;
     
 }
-.show-more {
-    position: fixed;
-    bottom: 5vh;
-    right: 5vw;
-}
 .hide {
     display: none;
 }
