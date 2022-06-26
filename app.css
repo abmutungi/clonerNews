@@ -1,0 +1,32 @@
+body {
+    box-sizing: border-box;
+}
+h1,
+nav {
+    text-align: center;
+}
+a {
+    color: black;
+}
+nav button {
+    /* all: unset; */
+    border: 1px solid rgb(226, 226, 226);
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    padding: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 10px;
+}
+.main-container-class {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 20px;
+}
+.story-div-class {
+    border: 1px solid rgb(226, 226, 226);
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    border-radius: 16px;
+    margin-bottom: 10px;
+    padding: 10px 40px;
+}
