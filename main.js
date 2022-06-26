@@ -44,7 +44,10 @@ const displayComments = (kid) => {
     commentDiv.append(commentContent);
     if (kid.kids) {
         const commentBtn = document.createElement("button");
-        commentBtn.textContent = `${kid.kids.length} Comments`;
+        kid.kids.length === 1
+            ? (commentBtn.textContent = `${kid.kids.length} Comment`)
+            : (commentBtn.textContent = `${kid.kids.length} Comments`);
+
         commentBtn.className = "btn";
         commentDiv.append(commentBtn);
         commentBtn.addEventListener(
@@ -104,11 +107,10 @@ const displayData = (story) => {
     storyDiv.append(storyAuthor);
     storyDiv.append(storyContent);
     if (story.kids) {
-        if (story.kids.length === 1) {
-            storyComment.textContent = `${story.kids.length} Comment`;
-        } else {
-            storyComment.textContent = `${story.kids.length} Comments`;
-        }
+        story.kids.length === 1
+            ? (storyComment.textContent = `${story.kids.length} Comment`)
+            : (storyComment.textContent = `${story.kids.length} Comments`);
+
         storyDiv.append(storyComment);
         storyComment.className = "btn";
         storyComment.addEventListener(
