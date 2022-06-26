@@ -30,7 +30,7 @@ const displayData = (story) => {
     const storyDiv = document.createElement('div');
     const storyLink = document.createElement('a');
     const storyHead = document.createElement('h3');
-    const storyContent = document.createElement('p');
+    const storyContent = document.createElement('div');
     const storyAuthor = document.createElement('div');
     storyDiv.id = story.id;
     storyDiv.className = 'story-div-class';
@@ -40,8 +40,9 @@ const displayData = (story) => {
     }
     if (story.text) {
         storyContent.innerHTML = story.text;
+        storyContent.className = 'content-class';
     }
-    storyAuthor.innerHTML = `<span>@${story.by}<span> <span>${timeConverter(
+    storyAuthor.innerHTML = `<span><b>@${story.by}</b> ${timeConverter(
         story.time
     )}</span>`;
     storyLink.append(storyHead);
@@ -61,7 +62,7 @@ const handleStories = (e) => {
         );
         const sData = await showStoriesData.json();
         const sortedData = [...sData].sort((a, b) => (a > b ? -1 : 1));
-        const slicedData = sortedData.slice(0, 100);
+        const slicedData = sortedData.slice(0, 10);
         const showStories = await Promise.all([
             ...slicedData.map((storyId) =>
                 fetch(
