@@ -80,7 +80,7 @@ const handleComments = (commentIds) => {
     });
 };
 
-const displayData = (story,index) => {
+const displayData = (story, index) => {
     const container = document.querySelector(".main-container-class");
     const storyDiv = document.createElement("div");
     const storyLink = document.createElement("a");
@@ -101,7 +101,7 @@ const displayData = (story,index) => {
     storyDiv.setAttribute("data-type", `${story.type}`);
     storyDiv.id = story.id;
     storyDiv.className = "story-div-class";
-    if (index >= 10 ) storyDiv.classList.add("hide")
+    if (index >= 10) storyDiv.classList.add("hide");
     storyHead.textContent = story.title;
     storyLink.append(storyHead);
     storyDiv.append(storyLink);
@@ -135,7 +135,7 @@ const handleStories = (e) => {
         );
         const sData = await showStoriesData.json();
         const sortedData = [...sData].sort((a, b) => (a > b ? -1 : 1));
-       // const slicedData = sortedData.slice(0, 10);
+        // const slicedData = sortedData.slice(0, 10);
         const showStories = await Promise.all([
             ...sortedData.map((storyId) =>
                 fetch(
@@ -164,7 +164,7 @@ const handleStories = (e) => {
         element.remove();
     });
     getStoriesData().then((showStories) => {
-        showStories.forEach((story,index) => {
+        showStories.forEach((story, index) => {
             displayData(story, index);
         });
     });
@@ -250,17 +250,55 @@ const handlePolls = () => {
 };
 
 const handleMore = () => {
-  const stories = [...document.querySelectorAll('.story-div-class')]
-  stories.some((story, i, arr) => {
-    if (!story.classList.contains('hide') 
-      && arr[i+1].classList.contains('hide')) {
-        for (let j = i+1; j <= i + 10 && arr[j] !== undefined; j++) {
-          arr[j].classList.remove('hide');
-          if (arr[j+1] === undefined) 
-            document.querySelector('.show-more').classList.add('hide')
+    const stories = [...document.querySelectorAll(".story-div-class")];
+    stories.some((story, i, arr) => {
+        if (
+            !story.classList.contains("hide") &&
+            arr[i + 1].classList.contains("hide")
+        ) {
+            for (let j = i + 1; j <= i + 10 && arr[j] !== undefined; j++) {
+                arr[j].classList.remove("hide");
+                if (arr[j + 1] === undefined)
+                    document.querySelector(".show-more").classList.add("hide");
+            }
+            return true;
         }
-        return true
-      }
-    return false;
-  })
-}
+        return false;
+    });
+};
+
+const throttle = (func, wait) => {
+    let isWaiting = false;
+    return (...args) => {
+        if (isWaiting) return;
+        func(...args);
+        isWaiting = true;
+        setTimeout(() => {
+            isWaiting = false;
+        }, wait);
+    };
+};
+
+let inMaxId;
+let currMaxId;
+const fetchMaxId = () => {
+    console.log(inMaxId, currMaxId);
+    fetch(`https://hacker-news.firebaseio.com/v0/maxitem.json?print=pretty`)
+        .then((max) => max.json())
+        .then((inMax) => {
+            if (inMaxId === undefined) {
+                inMaxId = inMax;
+            } else {
+                currMaxId = inMax;
+            }
+            if (inMaxId && currMaxId && inMaxId !== currMaxId) {
+                let newId = document.querySelector(".new");
+                newId.style.background = "#f73458";
+            }
+            setTimeout(throttle(fetchMaxId, 5000), 5000);
+        });
+};
+
+const handleNew = () => {
+    
+};
