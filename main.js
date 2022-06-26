@@ -334,3 +334,34 @@ const handleNew = () => {
     let newId = document.querySelector(".new");
     newId.style.background = "buttonface";
 };
+
+let karmaUsers = [];
+const fetchUsers = () => {
+    fetch(`https://hacker-news.firebaseio.com/v0/updates.json?print=pretty`)
+        .then((users) => users.json())
+        .then((user) => {
+            karmaUsers.push(user.profiles);
+        });
+};
+
+const handlePoll = () => {
+    const getUsersData = async (karmaUsers) => {
+        const showUsers = await Promise.all([
+            ...karmaUsers.map((username) =>
+                fetch(
+                    `https://hacker-news.firebaseio.com/v0/user/${username}.json?print=pretty`
+                ).then((showUser) => showUser.json())
+            ),
+        ]);
+        return showUsers;
+    };
+    getUsersData(karmaUsers).then((showUsers) => {
+        showUsers.forEach((kUser) => {
+            if (kUser.karma >= 200) {
+                console.log(kUser);
+            } else {
+                console.log("not enough karma");
+            }
+        });
+    });
+};
