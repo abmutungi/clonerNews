@@ -1,6 +1,6 @@
 const timeConverter = (UNIX_timestamp) => {
-    var a = new Date(UNIX_timestamp * 1000);
-    var months = [
+    let a = new Date(UNIX_timestamp * 1000);
+    let months = [
         "Jan",
         "Feb",
         "Mar",
@@ -14,13 +14,13 @@ const timeConverter = (UNIX_timestamp) => {
         "Nov",
         "Dec",
     ];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate() < 10 ? `0${a.getDate()}` : a.getDate();
-    var hour = a.getHours() < 10 ? `0${a.getHours()}` : a.getHours();
-    var min = a.getMinutes() < 10 ? `0${a.getMinutes()}` : a.getMinutes();
-    var sec = a.getSeconds() < 10 ? `0${a.getSeconds()}` : a.getSeconds();
-    var time = `${date} ${month} ${year} ${hour}:${min}:${sec}`;
+    let year = a.getFullYear();
+    let month = months[a.getMonth()];
+    let date = a.getDate() < 10 ? `0${a.getDate()}` : a.getDate();
+    let hour = a.getHours() < 10 ? `0${a.getHours()}` : a.getHours();
+    let min = a.getMinutes() < 10 ? `0${a.getMinutes()}` : a.getMinutes();
+    let sec = a.getSeconds() < 10 ? `0${a.getSeconds()}` : a.getSeconds();
+    let time = `${date} ${month} ${year} ${hour}:${min}:${sec}`;
     return time;
 };
 console.log(timeConverter(1656194839));
@@ -83,7 +83,6 @@ const handleComments = (commentIds) => {
 const displayData = (story,index) => {
     const container = document.querySelector(".main-container-class");
     const storyDiv = document.createElement("div");
-    
     const storyLink = document.createElement("a");
     const storyHead = document.createElement("h3");
     const storyContent = document.createElement("div");
