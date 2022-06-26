@@ -58,7 +58,11 @@ const displayComments = (kid) => {
             { once: true }
         );
     }
-    parent.append(commentDiv);
+    if (parent) parent.append(commentDiv);
+    if (!parent) {
+        const container = document.querySelector(".main-container-class");
+        container.append(commentDiv);
+    }
 };
 
 const handleComments = (commentIds) => {
@@ -300,5 +304,33 @@ const fetchMaxId = () => {
 };
 
 const handleNew = () => {
-    
+    let newItems = [];
+    for (let i = inMaxId; i <= currMaxId; i++) {
+        newItems.push(i);
+    }
+
+    const getItemsData = async (newItems) => {
+        const showItems = await Promise.all([
+            ...newItems.map((newItemId) =>
+                fetch(
+                    `https://hacker-news.firebaseio.com/v0/item/${newItemId}.json?print=pretty`
+                ).then((showItem) => showItem.json())
+            ),
+        ]);
+        return showItems;
+    };
+    getItemsData(newItems).then((showItems) => {
+        showItems.forEach((newItem) => {
+            if (newItem.type === "comment") {
+                displayComments(newItem);
+            } else if (newItem.type === "story" || newItem.type === "job") {
+                displayData(newItem);
+            } else {
+                console.log(newItem);
+            }
+        });
+    });
+    inMaxId = currMaxId;
+    let newId = document.querySelector(".new");
+    newId.style.background = "buttonface";
 };
