@@ -11,7 +11,7 @@ h3 {
 a {
     color: #f73458;
 }
-nav button {
+button {
     /* all: unset; */
     border: 1px solid rgb(226, 226, 226);
     box-shadow: 0 3px 10px rgba(109, 74, 74, 0.2);
@@ -30,6 +30,8 @@ nav button {
     margin: 20px;
 }
 .story-div-class {
+    display: flex;
+    flex-direction: column;
     border: 1px solid rgb(226, 226, 226);
     box-shadow: 0 3px 10px rgba(109, 74, 74, 0.2);
     border-radius: 16px;
