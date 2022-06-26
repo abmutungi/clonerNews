@@ -1,3 +1,29 @@
+const timeConverter = (UNIX_timestamp) => {
+    var a = new Date(UNIX_timestamp * 1000);
+    var months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+    ];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate() < 10 ? `0${a.getDate()}` : a.getDate();
+    var hour = a.getHours() < 10 ? `0${a.getHours()}` : a.getHours();
+    var min = a.getMinutes() < 10 ? `0${a.getMinutes()}` : a.getMinutes();
+    var sec = a.getSeconds() < 10 ? `0${a.getSeconds()}` : a.getSeconds();
+    var time = `${date} ${month} ${year} ${hour}:${min}:${sec}`;
+    return time;
+};
+console.log(timeConverter(1656194839));
 const displayData = (story) => {
     console.log(story);
     const container = document.querySelector('.main-container-class');
@@ -15,13 +41,16 @@ const displayData = (story) => {
     if (story.text) {
         storyContent.innerHTML = story.text;
     }
-    storyAuthor.textContent = `@${story.by}`;
+    storyAuthor.innerHTML = `<span>@${story.by}<span> <span>${timeConverter(
+        story.time
+    )}</span>`;
     storyLink.append(storyHead);
     storyDiv.append(storyLink);
     storyDiv.append(storyAuthor);
     storyDiv.append(storyContent);
     container.append(storyDiv);
 };
+
 const handleStories = (e) => {
     console.log(e.innerText);
     const getStoriesData = async () => {
@@ -32,7 +61,7 @@ const handleStories = (e) => {
         );
         const sData = await showStoriesData.json();
         const sortedData = [...sData].sort((a, b) => (a > b ? -1 : 1));
-        const slicedData = sortedData.slice(0, 10);
+        const slicedData = sortedData.slice(0, 100);
         const showStories = await Promise.all([
             ...slicedData.map((storyId) =>
                 fetch(
@@ -64,10 +93,11 @@ const getPoll = ([[id, startId, maxId], count, polls]) => {
         .then((data) => {
             let fetchNewId;
             let fetchNewCount;
-            let fetchNewPolls = polls ? [...polls] : [];
+            let fetchNewPolls = newPolls ? [...newPolls] : [];
             if (data.type === 'poll') {
                 console.log(data, data.type === 'poll');
                 fetchNewPolls.push(data);
+                console.log(fetchNewPolls);
                 fetchNewCount = newCount + 1;
             }
             if (data.type !== 'poll') {
