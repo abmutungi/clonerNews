@@ -39,11 +39,14 @@ button {
     padding: 10px 40px;
 
 }
-
-
 .btn{
     width: 120px;
     
+}
+.show-more {
+    position: fixed;
+    bottom: 5vh;
+    right: 5vw;
 }
 .hide {
     display: none;
