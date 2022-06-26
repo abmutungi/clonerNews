@@ -104,7 +104,11 @@ const displayData = (story) => {
     storyDiv.append(storyAuthor);
     storyDiv.append(storyContent);
     if (story.kids) {
-        storyComment.textContent = `${story.kids.length} Comments`;
+        if (story.kids.length === 1) {
+            storyComment.textContent = `${story.kids.length} Comment`;
+        } else {
+            storyComment.textContent = `${story.kids.length} Comments`;
+        }
         storyDiv.append(storyComment);
         storyComment.className = "btn";
         storyComment.addEventListener(
