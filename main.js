@@ -80,9 +80,10 @@ const handleComments = (commentIds) => {
     });
 };
 
-const displayData = (story) => {
+const displayData = (story,index) => {
     const container = document.querySelector(".main-container-class");
     const storyDiv = document.createElement("div");
+    
     const storyLink = document.createElement("a");
     const storyHead = document.createElement("h3");
     const storyContent = document.createElement("div");
@@ -101,6 +102,7 @@ const displayData = (story) => {
     storyDiv.setAttribute("data-type", `${story.type}`);
     storyDiv.id = story.id;
     storyDiv.className = "story-div-class";
+    if (index >= 10 ) storyDiv.classList.add("hide")
     storyHead.textContent = story.title;
     storyLink.append(storyHead);
     storyDiv.append(storyLink);
@@ -134,9 +136,9 @@ const handleStories = (e) => {
         );
         const sData = await showStoriesData.json();
         const sortedData = [...sData].sort((a, b) => (a > b ? -1 : 1));
-        const slicedData = sortedData.slice(0, 10);
+       // const slicedData = sortedData.slice(0, 10);
         const showStories = await Promise.all([
-            ...slicedData.map((storyId) =>
+            ...sortedData.map((storyId) =>
                 fetch(
                     `https://hacker-news.firebaseio.com/v0/item/${storyId}.json?print=pretty`
                 ).then((showStory) => showStory.json())
@@ -163,8 +165,8 @@ const handleStories = (e) => {
         element.remove();
     });
     getStoriesData().then((showStories) => {
-        showStories.forEach((story) => {
-            displayData(story);
+        showStories.forEach((story,index) => {
+            displayData(story, index);
         });
     });
 };

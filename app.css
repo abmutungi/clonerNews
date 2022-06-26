@@ -45,3 +45,6 @@ button {
     width: 120px;
     
 }
+.hide {
+    display: none;
+}
