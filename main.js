@@ -248,3 +248,19 @@ const handlePolls = () => {
     };
     magicLoop();
 };
+
+const handleMore = () => {
+  const stories = [...document.querySelectorAll('.story-div-class')]
+  stories.some((story, i, arr) => {
+    if (!story.classList.contains('hide') 
+      && arr[i+1].classList.contains('hide')) {
+        for (let j = i+1; j <= i + 10 && arr[j] !== undefined; j++) {
+          arr[j].classList.remove('hide');
+          if (arr[j+1] === undefined) 
+            document.querySelector('.show-more').classList.add('hide')
+        }
+        return true
+      }
+    return false;
+  })
+}
