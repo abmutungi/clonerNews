@@ -1,4 +1,3 @@
-
 const timeConverter = (UNIX_timestamp) => {
     let a = new Date(UNIX_timestamp * 1000);
     let months = [
@@ -235,8 +234,8 @@ const displayPoll = (poll, index) => {
     if (index >= 10) pollDiv.classList.add('hide');
     pollHead.textContent = poll.title;
     pollLink.append(pollHead);
-    pollDiv.append(pollLink);
-    pollDiv.append(pollAuthor);
+    pollDiv.prepend(pollAuthor);
+    pollDiv.prepend(pollLink);
     if (poll.kids) {
         poll.kids.length === 1
             ? (pollComment.textContent = `${poll.kids.length} Comment`)
@@ -451,6 +450,6 @@ const handleNew = () => {
 const storiesBtn = document.querySelector('.stories');
 const jobsBtn = document.querySelector('.jobs');
 const pollsBtn = document.querySelector('.polls');
-storiesBtn.addEventListener("click", throttle(handleStories, 5000));
-jobsBtn.addEventListener("click", throttle(handleStories, 5000));
-pollsBtn.addEventListener("click", throttle(handlePolls, 5000));
+storiesBtn.addEventListener('click', throttle(handleStories, 5000));
+jobsBtn.addEventListener('click', throttle(handleStories, 5000));
+pollsBtn.addEventListener('click', throttle(handlePolls, 5000));
