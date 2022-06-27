@@ -255,7 +255,9 @@ const handlePolls = () => {
     notIncluded.forEach((element) => {
         element.remove();
     });
-    const polls = [31869104, 31788898, 31780911, 31716715, 31598236, 31587976];
+    const polls = [
+        31891675, 31869104, 31788898, 31780911, 31716715, 31598236, 31587976,
+    ];
     const getPollsData = async (polls) => {
         const showPolls = await Promise.all([
             ...polls.map((newPollId) =>
@@ -451,7 +453,7 @@ const handleJobs = () => {
     });
     const getStoriesData = async () => {
         const showStoriesData = await fetch(
-          'https://hacker-news.firebaseio.com/v0/jobstories.json?print=pretty'
+            'https://hacker-news.firebaseio.com/v0/jobstories.json?print=pretty'
         );
         const sData = await showStoriesData.json();
         const sortedData = [...sData].sort((a, b) => (a > b ? -1 : 1));
@@ -471,7 +473,7 @@ const handleJobs = () => {
             displayData(story, index);
         });
     });
-}
+};
 const storiesBtn = document.querySelector('.stories');
 const jobsBtn = document.querySelector('.jobs');
 const pollsBtn = document.querySelector('.polls');
