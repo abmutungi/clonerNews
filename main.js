@@ -181,7 +181,7 @@ const displayPollOption = (option) => {
     console.log(parent);
     const optionDiv = document.createElement('div');
     const optionContent = document.createElement('div');
-    optionContent.innerHTML = option.text;
+    optionContent.innerHTML = `${option.text}: ${option.score}`;
     optionContent.className = 'content-class';
     optionDiv.id = option.id;
     optionDiv.className = 'poll-divclass';
