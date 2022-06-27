@@ -1,3 +1,4 @@
+
 const timeConverter = (UNIX_timestamp) => {
     let a = new Date(UNIX_timestamp * 1000);
     let months = [
@@ -425,9 +426,9 @@ const handleNew = () => {
             //     displayComments(newItem);
             // } else
             if (
-                !newItems.type ||
-                newItems.dead === true ||
-                newItems.deleted === true
+                !newItem.type ||
+                newItem.dead === true ||
+                newItem.deleted === true
             ) {
                 return;
             }
@@ -446,3 +447,10 @@ const handleNew = () => {
     let newId = document.querySelector('.new');
     newId.style.background = 'buttonface';
 };
+
+const storiesBtn = document.querySelector('.stories');
+const jobsBtn = document.querySelector('.jobs');
+const pollsBtn = document.querySelector('.polls');
+storiesBtn.addEventListener("click", throttle(handleStories, 5000));
+jobsBtn.addEventListener("click", throttle(handleStories, 5000));
+pollsBtn.addEventListener("click", throttle(handlePolls, 5000));
