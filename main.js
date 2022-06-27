@@ -1,18 +1,18 @@
 const timeConverter = (UNIX_timestamp) => {
     let a = new Date(UNIX_timestamp * 1000);
     let months = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
     ];
     let year = a.getFullYear();
     let month = months[a.getMonth()];
@@ -35,32 +35,34 @@ const throttle = (func, wait) => {
     };
 };
 const displayComments = (kid) => {
-    console.log(document.body);
+    if (kid.dead === true || kid.deleted === true) {
+        return;
+    }
     const parent = document.getElementById(kid.parent);
-    const commentDiv = document.createElement('div');
-    const commentContent = document.createElement('div');
-    const commentAuthor = document.createElement('div');
+    const commentDiv = document.createElement("div");
+    const commentContent = document.createElement("div");
+    const commentAuthor = document.createElement("div");
     if (kid.text) {
         commentContent.innerHTML = kid.text;
-        commentContent.className = 'content-class';
+        commentContent.className = "content-class";
     }
     commentDiv.id = kid.id;
-    commentDiv.className = 'story-div-class';
+    commentDiv.className = "story-div-class";
     commentAuthor.innerHTML = `<span><b>@${kid.by}</b> ${timeConverter(
         kid.time
     )}</span>`;
     commentDiv.append(commentAuthor);
     commentDiv.append(commentContent);
     if (kid.kids) {
-        const commentBtn = document.createElement('button');
+        const commentBtn = document.createElement("button");
         kid.kids.length === 1
             ? (commentBtn.textContent = `${kid.kids.length} Comment`)
             : (commentBtn.textContent = `${kid.kids.length} Comments`);
 
-        commentBtn.className = 'btn';
+        commentBtn.className = "btn";
         commentDiv.append(commentBtn);
         commentBtn.addEventListener(
-            'click',
+            "click",
             () => {
                 handleComments(kid.kids);
             },
@@ -69,7 +71,7 @@ const displayComments = (kid) => {
     }
     if (parent) parent.append(commentDiv);
     if (!parent) {
-        const container = document.querySelector('.main-container-class');
+        const container = document.querySelector(".main-container-class");
         container.append(commentDiv);
     }
 };
@@ -92,27 +94,31 @@ const handleComments = (commentIds) => {
     });
 };
 const displayData = (story, index) => {
-    const container = document.querySelector('.main-container-class');
-    const storyDiv = document.createElement('div');
-    const storyLink = document.createElement('a');
-    const storyHead = document.createElement('h3');
-    const storyContent = document.createElement('div');
-    const storyAuthor = document.createElement('div');
-    const storyComment = document.createElement('button');
+    if (story.dead === true || story.deleted === true) {
+        return;
+    }
+
+    const container = document.querySelector(".main-container-class");
+    const storyDiv = document.createElement("div");
+    const storyLink = document.createElement("a");
+    const storyHead = document.createElement("h3");
+    const storyContent = document.createElement("div");
+    const storyAuthor = document.createElement("div");
+    const storyComment = document.createElement("button");
     if (story.url) {
         storyLink.href = story.url;
     }
     if (story.text) {
         storyContent.innerHTML = story.text;
-        storyContent.className = 'content-class';
+        storyContent.className = "content-class";
     }
     storyAuthor.innerHTML = `<span><b>@${story.by}</b> ${timeConverter(
         story.time
     )}</span>`;
-    storyDiv.setAttribute('data-type', `${story.type}`);
+    storyDiv.setAttribute("data-type", `${story.type}`);
     storyDiv.id = story.id;
-    storyDiv.className = 'story-div-class';
-    if (index >= 10) storyDiv.classList.add('hide');
+    storyDiv.className = "story-div-class";
+    if (index >= 10) storyDiv.classList.add("hide");
     storyHead.textContent = story.title;
     storyLink.append(storyHead);
     storyDiv.append(storyLink);
@@ -124,9 +130,9 @@ const displayData = (story, index) => {
             : (storyComment.textContent = `${story.kids.length} Comments`);
 
         storyDiv.append(storyComment);
-        storyComment.className = 'btn';
+        storyComment.className = "btn";
         storyComment.addEventListener(
-            'click',
+            "click",
             (e) => {
                 handleComments(story.kids);
             },
@@ -143,9 +149,9 @@ const handleStories = (e) => {
     });
     const getStoriesData = async () => {
         const showStoriesData = await fetch(
-            e.innerText === 'Stories'
-                ? 'https://hacker-news.firebaseio.com//v0/showstories.json?print=pretty'
-                : 'https://hacker-news.firebaseio.com/v0/jobstories.json?print=pretty'
+            e.innerText === "Stories"
+                ? "https://hacker-news.firebaseio.com//v0/showstories.json?print=pretty"
+                : "https://hacker-news.firebaseio.com/v0/jobstories.json?print=pretty"
         );
         const sData = await showStoriesData.json();
         const sortedData = [...sData].sort((a, b) => (a > b ? -1 : 1));
@@ -166,14 +172,17 @@ const handleStories = (e) => {
     });
 };
 const displayPollOption = (option) => {
+    if (option.dead === true || option.deleted === true) {
+        return;
+    }
     const parent = document.getElementById(option.poll);
     console.log(parent);
-    const optionDiv = document.createElement('div');
-    const optionContent = document.createElement('div');
+    const optionDiv = document.createElement("div");
+    const optionContent = document.createElement("div");
     optionContent.innerHTML = option.text;
-    optionContent.className = 'content-class';
+    optionContent.className = "content-class";
     optionDiv.id = option.id;
-    optionDiv.className = 'poll-divclass';
+    optionDiv.className = "poll-divclass";
     optionDiv.append(optionContent);
     parent.append(optionDiv);
 };
@@ -196,29 +205,32 @@ const handlePollOption = (pollOptions) => {
     });
 };
 const displayPoll = (poll, index) => {
-    const container = document.querySelector('.main-container-class');
-    const pollDiv = document.createElement('div');
-    const pollLink = document.createElement('a');
-    const pollHead = document.createElement('h3');
-    const pollContent = document.createElement('div');
-    const pollAuthor = document.createElement('div');
-    const pollComment = document.createElement('button');
+    if (poll.dead === true || poll.deleted === true) {
+        return;
+    }
+    const container = document.querySelector(".main-container-class");
+    const pollDiv = document.createElement("div");
+    const pollLink = document.createElement("a");
+    const pollHead = document.createElement("h3");
+    const pollContent = document.createElement("div");
+    const pollAuthor = document.createElement("div");
+    const pollComment = document.createElement("button");
     if (poll.url) {
         pollLink.href = poll.url;
     }
     if (poll.text) {
         pollContent.innerHTML = poll.text;
-        pollContent.className = 'content-class';
+        pollContent.className = "content-class";
         pollDiv.append(pollContent);
     }
     handlePollOption(poll.parts);
     pollAuthor.innerHTML = `<span><b>@${poll.by}</b> ${timeConverter(
         poll.time
     )}</span>`;
-    pollDiv.setAttribute('data-type', `${poll.type}`);
+    pollDiv.setAttribute("data-type", `${poll.type}`);
     pollDiv.id = poll.id;
-    pollDiv.className = 'story-div-class';
-    if (index >= 10) pollDiv.classList.add('hide');
+    pollDiv.className = "story-div-class";
+    if (index >= 10) pollDiv.classList.add("hide");
     pollHead.textContent = poll.title;
     pollLink.append(pollHead);
     pollDiv.append(pollLink);
@@ -228,9 +240,9 @@ const displayPoll = (poll, index) => {
             ? (pollComment.textContent = `${poll.kids.length} Comment`)
             : (pollComment.textContent = `${poll.kids.length} Comments`);
         pollDiv.append(pollComment);
-        pollComment.className = 'btn';
+        pollComment.className = "btn";
         pollComment.addEventListener(
-            'click',
+            "click",
             (e) => {
                 handleComments(poll.kids);
             },
@@ -352,16 +364,16 @@ const handlePolls = () => {
 //     magicLoop();
 // };
 const handleMore = () => {
-    const stories = [...document.querySelectorAll('.story-div-class')];
+    const stories = [...document.querySelectorAll(".story-div-class")];
     stories.some((story, i, arr) => {
         if (
-            !story.classList.contains('hide') &&
-            arr[i + 1].classList.contains('hide')
+            !story.classList.contains("hide") &&
+            arr[i + 1].classList.contains("hide")
         ) {
             for (let j = i + 1; j <= i + 10 && arr[j] !== undefined; j++) {
-                arr[j].classList.remove('hide');
+                arr[j].classList.remove("hide");
                 if (arr[j + 1] === undefined)
-                    document.querySelector('.show-more').classList.add('hide');
+                    document.querySelector(".show-more").classList.add("hide");
             }
             return true;
         }
@@ -381,8 +393,8 @@ const fetchMaxId = () => {
                 currMaxId = inMax;
             }
             if (inMaxId && currMaxId && inMaxId !== currMaxId) {
-                let newId = document.querySelector('.new');
-                newId.style.background = '#f73458';
+                let newId = document.querySelector(".new");
+                newId.style.background = "#f73458";
             }
             setTimeout(throttle(fetchMaxId, 5000), 5000);
         });
@@ -394,7 +406,7 @@ const handleNew = () => {
     });
     let newItems = [];
     for (let i = inMaxId; i <= currMaxId; i++) {
-        newItems.push(i);
+        newItems.unshift(i);
     }
     const getItemsData = async (newItems) => {
         const showItems = await Promise.all([
@@ -411,9 +423,13 @@ const handleNew = () => {
             // if (newItem.type === 'comment') {
             //     displayComments(newItem);
             // } else
-            if (newItem.type === 'story' || newItem.type === 'job') {
+            if (newItems.dead === true || newItems.deleted === true) {
+                return;
+            }
+
+            if (newItem.type === "story" || newItem.type === "job") {
                 displayData(newItem);
-            } else if (newItem.type === 'poll') {
+            } else if (newItem.type === "poll") {
                 displayPoll(newItem);
             } else {
                 console.log(newItem);
@@ -421,6 +437,6 @@ const handleNew = () => {
         });
     });
     inMaxId = currMaxId;
-    let newId = document.querySelector('.new');
-    newId.style.background = 'buttonface';
+    let newId = document.querySelector(".new");
+    newId.style.background = "buttonface";
 };
