@@ -149,9 +149,7 @@ const handleStories = (e) => {
     });
     const getStoriesData = async () => {
         const showStoriesData = await fetch(
-            e.innerText === 'Stories'
-                ? 'https://hacker-news.firebaseio.com//v0/showstories.json?print=pretty'
-                : 'https://hacker-news.firebaseio.com/v0/jobstories.json?print=pretty'
+            'https://hacker-news.firebaseio.com//v0/showstories.json?print=pretty'
         );
         const sData = await showStoriesData.json();
         const sortedData = [...sData].sort((a, b) => (a > b ? -1 : 1));
@@ -446,10 +444,37 @@ const handleNew = () => {
     let newId = document.querySelector('.new');
     newId.style.background = 'buttonface';
 };
-
+const handleJobs = () => {
+    let notIncluded = document.querySelectorAll(`.main-container-class div`);
+    notIncluded.forEach((element) => {
+        element.remove();
+    });
+    const getStoriesData = async () => {
+        const showStoriesData = await fetch(
+          'https://hacker-news.firebaseio.com/v0/jobstories.json?print=pretty'
+        );
+        const sData = await showStoriesData.json();
+        const sortedData = [...sData].sort((a, b) => (a > b ? -1 : 1));
+        // const slicedData = sortedData.slice(0, 10);
+        const showStories = await Promise.all([
+            ...sortedData.map((storyId) =>
+                fetch(
+                    `https://hacker-news.firebaseio.com/v0/item/${storyId}.json?print=pretty`
+                ).then((showStory) => showStory.json())
+            ),
+        ]);
+        return showStories;
+    };
+    getStoriesData().then((showStories) => {
+        showStories.forEach((story, index) => {
+            console.log(story);
+            displayData(story, index);
+        });
+    });
+}
 const storiesBtn = document.querySelector('.stories');
 const jobsBtn = document.querySelector('.jobs');
 const pollsBtn = document.querySelector('.polls');
 storiesBtn.addEventListener('click', throttle(handleStories, 5000));
-jobsBtn.addEventListener('click', throttle(handleStories, 5000));
+jobsBtn.addEventListener('click', throttle(handleJobs, 5000));
 pollsBtn.addEventListener('click', throttle(handlePolls, 5000));
