@@ -23,6 +23,17 @@ const timeConverter = (UNIX_timestamp) => {
     let time = `${date} ${month} ${year} ${hour}:${min}:${sec}`;
     return time;
 };
+const throttle = (func, wait) => {
+    let isWaiting = false;
+    return (...args) => {
+        if (isWaiting) return;
+        func(...args);
+        isWaiting = true;
+        setTimeout(() => {
+            isWaiting = false;
+        }, wait);
+    };
+};
 const displayComments = (kid) => {
     console.log(document.body);
     const parent = document.getElementById(kid.parent);
@@ -192,15 +203,14 @@ const displayPoll = (poll, index) => {
     const pollContent = document.createElement('div');
     const pollAuthor = document.createElement('div');
     const pollComment = document.createElement('button');
-    const pollOption = document.createElement('div');
     if (poll.url) {
         pollLink.href = poll.url;
     }
     if (poll.text) {
         pollContent.innerHTML = poll.text;
         pollContent.className = 'content-class';
+        pollDiv.append(pollContent);
     }
-    pollOption.className = 'option-class';
     handlePollOption(poll.parts);
     pollAuthor.innerHTML = `<span><b>@${poll.by}</b> ${timeConverter(
         poll.time
@@ -213,8 +223,6 @@ const displayPoll = (poll, index) => {
     pollLink.append(pollHead);
     pollDiv.append(pollLink);
     pollDiv.append(pollAuthor);
-    pollDiv.append(pollContent);
-    pollDiv.append(pollOption);
     if (poll.kids) {
         poll.kids.length === 1
             ? (pollComment.textContent = `${poll.kids.length} Comment`)
@@ -229,7 +237,6 @@ const displayPoll = (poll, index) => {
             { once: true }
         );
     }
-
     container.append(pollDiv);
 };
 const handlePolls = () => {
@@ -361,17 +368,7 @@ const handleMore = () => {
         return false;
     });
 };
-const throttle = (func, wait) => {
-    let isWaiting = false;
-    return (...args) => {
-        if (isWaiting) return;
-        func(...args);
-        isWaiting = true;
-        setTimeout(() => {
-            isWaiting = false;
-        }, wait);
-    };
-};
+
 let inMaxId;
 let currMaxId;
 const fetchMaxId = () => {
@@ -411,10 +408,13 @@ const handleNew = () => {
     };
     getItemsData(newItems).then((showItems) => {
         showItems.forEach((newItem) => {
-            if (newItem.type === 'comment') {
-                displayComments(newItem);
-            } else if (newItem.type === 'story' || newItem.type === 'job') {
+            // if (newItem.type === 'comment') {
+            //     displayComments(newItem);
+            // } else
+            if (newItem.type === 'story' || newItem.type === 'job') {
                 displayData(newItem);
+            } else if (newItem.type === 'poll') {
+                displayPoll(newItem);
             } else {
                 console.log(newItem);
             }
