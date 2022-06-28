@@ -107,6 +107,7 @@ const displayData = (story, index) => {
     const storyComment = document.createElement('button');
     if (story.url) {
         storyLink.href = story.url;
+        storyLink.target = '_blank';
     }
     if (story.text) {
         storyContent.innerHTML = story.text;
@@ -216,6 +217,7 @@ const displayPoll = (poll, index) => {
     const pollComment = document.createElement('button');
     if (poll.url) {
         pollLink.href = poll.url;
+        pollLink.target = '_blank';
     }
     if (poll.text) {
         pollContent.innerHTML = poll.text;
