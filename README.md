@@ -15,5 +15,6 @@ This project introduced me to :
 - API
 - Throttling/debouncing
 
+## Authors:
 
 [Arnold Mutungi](https://github.com/abmutungi), [Ricky Adriell](https://git.learn.01founders.co/Adriell), [Esteban López](https://git.learn.01founders.co/estlop)
