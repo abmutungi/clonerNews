@@ -1,4 +1,4 @@
-### [Hacker News API](https://news.ycombinator.com/) Project
+### [Hacker News](https://news.ycombinator.com/) API Project
 
 This repository contains files from a project completed at 01 Founders Coding School.
 
