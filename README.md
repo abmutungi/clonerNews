@@ -17,4 +17,4 @@ This project introduced me to :
 
 ## Authors:
 
-[Arnold Mutungi](https://github.com/abmutungi), [Ricky Adriell](https://git.learn.01founders.co/Adriell), [Esteban López](https://git.learn.01founders.co/estlop)
+[Arnold Mutungi](https://github.com/abmutungi), [Ricky Adriell](https://git.learn.01founders.co/Adriell), [Esteban López](https://git.learn.01founders.co/estlop) & [Bunmi Wajero](https://git.learn.01founders.co/bwajero)
